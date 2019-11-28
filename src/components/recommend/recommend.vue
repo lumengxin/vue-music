@@ -7,7 +7,8 @@
         <Slider>
           <div v-for="(item, index) in recommends" :key=index>
             <a href="javascript:;">
-              <img :src="item.picUrl" @load="loadImage" />
+              <!-- fastclick和scroll点击事件冲突：加类css属性 -->
+              <img :src="item.picUrl" @load="loadImage" class="needsclick" />
             </a>
           </div>
         </Slider>
@@ -18,7 +19,7 @@
         <ul>
           <li v-for="(item, index) in discList" :key=index class="item">
             <div class="icon">
-              <img :src="item.imgurl" alt="img" width="60" height="60" />
+              <img v-lazy="item.imgurl" alt="img" width="60" height="60" />
             </div>
             <div class="text">
               <h2 class="name" v-html="item.creator.name"></h2>

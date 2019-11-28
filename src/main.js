@@ -7,8 +7,14 @@ import router from './router'
 import fastclick from 'fastclick'
 // assets 别名 src/assets
 import 'assets/stylus/index.styl'
+// vue第三方插件，懒加载
+import VueLazyLoad from 'vue-lazyload'
 
 fastclick.attach(document.body)
+
+Vue.use(VueLazyLoad, {
+  loading: require('assets/image/logo1.png')
+})
 
 Vue.config.productionTip = false
 
