@@ -1,16 +1,18 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
+    <scroll class="recommend-content" :data="discList" ref="scroll">
+      <!-- 轮播 -->
       <!-- v-if: 确保slider中数据加载了，再执行slider组件mounted中dom操作 -->
       <div v-if="recommends.length" class="slider-wrapper">
         <Slider>
           <div v-for="(item, index) in recommends" :key=index>
             <a href="javascript:;">
-              <img :src="item.picUrl" />
+              <img :src="item.picUrl" @load="loadImage" />
             </a>
           </div>
         </Slider>
       </div>
+      <!-- 歌单列表 -->
       <div class="recommend-list">
         <h1 class="list-title">热门歌单推荐</h1>
         <ul>
@@ -25,7 +27,7 @@
           </li>
         </ul>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
@@ -33,11 +35,13 @@
 import { getRecommend, getDiscList } from 'api/recommend'
 import { ERR_OK } from 'api/config'
 import Slider from 'base/slider/slider'
+import Scroll from 'base/scroll/scroll'
 
 export default {
   name: 'Recommend',
   components: {
-    Slider
+    Slider,
+    Scroll
   },
   data () {
     return {
@@ -61,6 +65,13 @@ export default {
           console.log(this.discList)
         }
       })
+    },
+    loadImage () {
+      // 只要有一张图片撑开高度即可。执行一次既可
+      if (!this.checkLoaded) {
+        this.$refs.scroll.refresh()
+        this.checkLoaded = true
+      }
     }
   },
   created () {
@@ -86,6 +97,7 @@ export default {
         width 100%
         overflow hidden
       .recommend-list
+
         .list-title
           height 65px
           line-height 65px
