@@ -1,34 +1,41 @@
 <template>
   <div class="recommend">
     <scroll class="recommend-content" :data="discList" ref="scroll">
-      <!-- 轮播 -->
-      <!-- v-if: 确保slider中数据加载了，再执行slider组件mounted中dom操作 -->
-      <div v-if="recommends.length" class="slider-wrapper">
-        <Slider>
-          <div v-for="(item, index) in recommends" :key=index>
-            <a href="javascript:;">
-              <!-- fastclick和scroll点击事件冲突：加类css属性 -->
-              <img :src="item.picUrl" @load="loadImage" class="needsclick" />
-            </a>
-          </div>
-        </Slider>
+      <!-- div标签：解决列表挤到顶部无法调整位置 -->
+      <div>
+        <!-- 轮播 -->
+        <!-- v-if: 确保slider中数据加载了，再执行slider组件mounted中dom操作 -->
+        <div v-if="recommends.length" class="slider-wrapper">
+          <Slider>
+            <div v-for="(item, index) in recommends" :key=index>
+              <a href="javascript:;">
+                <!-- fastclick和scroll点击事件冲突：加类css属性 -->
+                <img :src="item.picUrl" @load="loadImage" class="needsclick" />
+              </a>
+            </div>
+          </Slider>
+        </div>
+        <!-- 歌单列表 -->
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="(item, index) in discList" :key=index class="item">
+              <div class="icon">
+                <img v-lazy="item.imgurl" alt="img" width="60" height="60" />
+              </div>
+              <div class="text">
+                <h2 class="name" v-html="item.creator.name"></h2>
+                <p class="desc">{{item.dissname}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-      <!-- 歌单列表 -->
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌单推荐</h1>
-        <ul>
-          <li v-for="(item, index) in discList" :key=index class="item">
-            <div class="icon">
-              <img v-lazy="item.imgurl" alt="img" width="60" height="60" />
-            </div>
-            <div class="text">
-              <h2 class="name" v-html="item.creator.name"></h2>
-              <p class="desc">{{item.dissname}}</p>
-            </div>
-          </li>
-        </ul>
+      <div class="loading-container" v-show="!discList.length">
+        <loading></loading>
       </div>
     </scroll>
+
   </div>
 </template>
 
@@ -37,12 +44,14 @@ import { getRecommend, getDiscList } from 'api/recommend'
 import { ERR_OK } from 'api/config'
 import Slider from 'base/slider/slider'
 import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
 
 export default {
   name: 'Recommend',
   components: {
     Slider,
-    Scroll
+    Scroll,
+    Loading
   },
   data () {
     return {
@@ -127,4 +136,9 @@ export default {
               color $color-text
             .desc
               color $color-text-d
+      .loading-container
+        position absolute
+        width 100%
+        top 50%
+        transform translateY(-50%)
 </style>
