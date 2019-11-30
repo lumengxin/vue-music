@@ -35,20 +35,32 @@
         </li>
       </ul>
     </div>
+    <div class="list-fixed" v-show="fixedTitle" ref="fixed">
+      <h1 class="fixed-title">
+        {{fixedTitle}}
+      </h1>
+    </div>
+    <div class="loading-container" v-show="!data.length">
+      <loading></loading>
+    </div>
   </scroll>
 </template>
 
 <script>
 import Scroll from 'base/scroll/scroll'
 import { getData } from 'assets/js/dom'
+import Loading from 'base/loading/loading'
 
 // 每个字母高度
 const ANCHOR_HEIGHT = 18
+// 每个标题栏高度
+const TITLE_HEIGHT = 30
 
 export default {
   name: 'ListView',
   components: {
-    Scroll
+    Scroll,
+    Loading
   },
   props: {
     data: {
@@ -59,7 +71,8 @@ export default {
   data () {
     return {
       scrollY: -1,
-      currentIndex: 0
+      currentIndex: 0,
+      diff: -1
     }
   },
   computed: {
@@ -67,6 +80,13 @@ export default {
       return this.data.map((group) => {
         return group.title.substr(0, 1)
       })
+    },
+    fixedTitle () {
+      // 解决歌手列表头部位置下拉时，有两个‘热门’标题
+      if (this.scrollY > 0) {
+        return ''
+      }
+      return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
     }
   },
   watch: {
@@ -90,12 +110,23 @@ export default {
         if (!height2 || (-newY >= height1 && -newY < height2)) {
           this.currentIndex = i
           // console.log(this.currentIndex)
+
+          this.diff = height2 + newY
           return
         }
       }
       // 当滚动到底部，且-newY大于最后一个元素的上限
       this.currentIndex = listHeight.length - 2
       // this.currentIndex = 0
+    },
+    diff (newVal) {
+      let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0
+      // 固定标题栏和标题栏未接触时,不用操作dom,提高性能
+      if (this.fixedTop === fixedTop) {
+        return
+      }
+      this.fixedTop = fixedTop
+      this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`
     }
   },
   methods: {
@@ -214,4 +245,21 @@ export default {
         font-size $font-size-small
         &.current
           color $color-theme
+    .list-fixed
+      position absolute
+      top 0
+      left 0
+      width 100%
+      .fixed-title
+        height 30px
+        line-height 30px
+        padding-left 20px
+        font-size $font-size-small
+        color: $color-text-l
+        background $color-highlight-background
+    .loading-container
+      position absolute
+      width 100%
+      top 50%
+      transform translateY(-50%)
 </style>
