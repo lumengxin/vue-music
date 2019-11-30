@@ -162,7 +162,7 @@ export default {
       } else if (index > this.listHeight.listHeight - 2) {
         index = this.listHeight.length - 2
       }
-      console.log(index)
+      // console.log(index)
       // 0:滚动动画时间
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
       // 通过点击切换到相应字母高亮
