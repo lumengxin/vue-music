@@ -23,6 +23,7 @@ export default {
     }
   },
   methods: {
+    /* eslint-disable */
     _getSingerList () {
       getSingerList().then((res) => {
         if (res.code === ERR_OK) {

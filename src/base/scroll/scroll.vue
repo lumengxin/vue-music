@@ -7,6 +7,7 @@
 <script>
 import BScroll from 'better-scroll'
 
+/* eslint-disable */
 export default {
   name: 'Scroll',
   props: {
@@ -48,6 +49,12 @@ export default {
     },
     refresh () {
       this.scroll && this.scroll.refresh()
+    },
+    scrollTo () {
+      this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
+    },
+    scrollToElement () {
+      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
     }
   },
   mounted () {
