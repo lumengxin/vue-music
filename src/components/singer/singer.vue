@@ -10,6 +10,7 @@ import { getSingerList } from 'api/singer'
 import { ERR_OK } from 'api/config'
 import Singer from 'assets/js/singer'
 import ListView from 'base/listview/listview'
+import { mapMutations } from 'vuex'
 
 const HOT_NAME = '热门'
 const HOT_SINGER_LEN = 10
@@ -25,10 +26,12 @@ export default {
   },
   methods: {
     selectSinger (singer) {
-      console.log(singer)
       this.$router.push({
         path: `/singer/${singer.id}`
       })
+
+      // 向vuex中store写入 singer 数据
+      this.setSinger(singer)
     },
     /* eslint-disable */
     _getSingerList () {
@@ -88,13 +91,13 @@ export default {
       return hot.concat(ret)
       console.log("TCL: _normalizeSinger -> hot", hot)
       console.log("TCL: _normalizeSinger -> ret", ret)
-    }
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    })
   },
   created () {
     this._getSingerList()
-  },
-  mounted () {
-    // this.$on('select', item)
   }
 }
 </script>

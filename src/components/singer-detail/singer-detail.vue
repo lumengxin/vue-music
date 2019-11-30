@@ -7,8 +7,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'SingerDetail'
+  name: 'SingerDetail',
+  computed: {
+    ...mapGetters([
+      'singer'
+    ])
+  },
+  created () {
+    console.log(this.singer)
+  }
 }
 </script>
 
