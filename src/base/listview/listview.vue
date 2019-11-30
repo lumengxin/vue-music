@@ -1,5 +1,11 @@
 <template>
-  <scroll class="listview" ref="listview">
+  <scroll class="listview"
+    ref="listview"
+    :data="data"
+    :listenScroll="listenScroll"
+    :probeType="probeType"
+    @scroll="scroll"
+    >
     <ul>
       <li class="list-group"
         v-for="(group, index) in data"
@@ -23,6 +29,7 @@
           v-for="(item, index) in shortcutList"
           :key=index
           :data-index="index"
+          :class="{'current': currentIndex === index}"
           >
           {{item}}
         </li>
@@ -49,11 +56,38 @@ export default {
       default: []
     }
   },
+  data () {
+    return {
+      scrollY: -1,
+      currentIndex: 0
+    }
+  },
   computed: {
     shortcutList () {
       return this.data.map((group) => {
         return group.title.substr(0, 1)
       })
+    }
+  },
+  watch: {
+    data () {
+      setTimeout(() => {
+        this._calculateHeight()
+      }, 20)
+    },
+    scrollY (newY) {
+      // debugger
+      const listHeight = this.listHeight
+      for (let i = 0; i < listHeight.length; i++) {
+        let height1 = listHeight[i]
+        let height2 = listHeight[i + 1]
+        if (!height2 || (-newY > height1 && -newY < height2)) {
+          this.currentIndex = i
+          // console.log(this.currentIndex)
+          return
+        }
+      }
+      this.currentIndex = 0
     }
   },
   methods: {
@@ -74,13 +108,37 @@ export default {
       let anchorIndex = parseInt(this.touch.anchorIndex) + dalta
       this._scrollTo(anchorIndex)
     },
+    scroll (pos) {
+      this.scrollY = pos.y
+    },
     _scrollTo (index) {
+      // 0:滚动动画时间
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
+    },
+    _calculateHeight () {
+      // debugger
+      this.listHeight = []
+      const list = this.$refs.listGroup
+      let height = 0
+      this.listHeight.push(height)
+      for (let i = 0; i < list.length; i++) {
+        let item = list[i]
+        height += item.clientHeight
+        this.listHeight.push(height)
+      }
     }
   },
-  // touch不放到data中：不检测数据变化，只是关联到两个方法中
+  // touch不放到data()中：不检测数据变化，只是关联到两个方法中
   created () {
     this.touch = {}
+    this.listenScroll = true
+    this.listHeight = []
+    // 默认1：节流方式；3: 监听实时滚动
+    this.probeType = 3
+  },
+  mounted () {
+    // 解决_calculateHeight在wtach不执行，无法获取到listHeight
+    this._calculateHeight();
   }
 }
 </script>
