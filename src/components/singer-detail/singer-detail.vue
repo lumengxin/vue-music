@@ -1,8 +1,9 @@
 <template>
   <transition name="slide">
-  <div class="singer-detail">
+  <!-- <div class="singer-detail">
     aaa
-  </div>
+  </div> -->
+    <music-list :songs="songs" :title="title" :bg-image="bgImage"></music-list>
   </transition>
 </template>
 
@@ -11,15 +12,25 @@ import { mapGetters } from 'vuex'
 import { getSingerDetail } from 'api/singer'
 import { ERR_OK } from 'api/config'
 import { createSong } from 'assets/js/song'
+import MusicList from 'components/music-list/music-list'
 
 export default {
   name: 'SingerDetail',
+  components: {
+    MusicList
+  },
   data () {
     return {
-      song: []
+      songs: []
     }
   },
   computed: {
+    title () {
+      return this.singer.name
+    },
+    bgImage () {
+      return this.singer.avatar
+    },
     // 从vuex中store中获取singer数据
     ...mapGetters([
       'singer'
@@ -67,12 +78,12 @@ export default {
     transition all 0.3s
   .slide-enter, .slide-leave-to
     transform translate3d(100%, 0, 0)
-  .singer-detail
+  /* .singer-detail
     position fixed
     z-index 100
     top 0
     left 0
     right 0
     bottom 0
-    background $color-background
+    background $color-background */
 </style>
