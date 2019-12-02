@@ -79,10 +79,13 @@ export default {
       let ret = []
       for (let key in map) {
         let val = map[key]
-        if (val.title.match(/[a-zA-Z]/)) {
-          ret.push(val)
-        } else if (val.title === HOT_NAME) {
-          hot.push(val)
+        // 解决 undefined 报 match 相关错误
+        if (val.title !== undefined) {
+          if (val.title.match(/[a-zA-Z]/)) {
+            ret.push(val)
+          } else if (val.title === HOT_NAME) {
+            hot.push(val)
+          }
         }
       }
       ret.sort((a, b) => {

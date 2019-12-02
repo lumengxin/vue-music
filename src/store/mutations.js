@@ -8,7 +8,9 @@ const matutaions = {
     state.playing = flag
   },
   [types.SET_FULL_SCREEN] (state, flag) {
-    state.fullscreen = flag
+    // bug来源：fullscreen
+    // state.fullscreen = flag
+    state.fullScreen = flag
   },
   [types.SET_PLAYLIST] (state, list) {
     state.playlist = list

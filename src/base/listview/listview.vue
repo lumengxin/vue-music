@@ -174,7 +174,7 @@ export default {
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
       // 通过点击切换到相应字母高亮
       this.scrollY = -this.listHeight[index]
-   },
+    },
     _calculateHeight () {
       // debugger
       this.listHeight = []
@@ -198,7 +198,8 @@ export default {
   },
   mounted () {
     // 解决_calculateHeight在wtach不执行，无法获取到listHeight
-    this._calculateHeight()
+    // mounted() 时 list为undefined
+    // this._calculateHeight()
   }
 }
 </script>
