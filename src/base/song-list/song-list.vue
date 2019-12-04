@@ -18,6 +18,7 @@
 <script>
 export default {
   name: 'SongList',
+  /* eslint-disable */
   props: {
     songs: {
       type: Array,

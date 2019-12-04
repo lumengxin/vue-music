@@ -51,6 +51,7 @@ export default {
     SongList,
     Loading
   },
+  /* eslint-disable */
   props: {
     bgImage: {
       type: String,

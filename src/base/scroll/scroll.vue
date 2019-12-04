@@ -22,6 +22,7 @@ export default {
     data: {
       type: Array,
       default: null
+      // default: []
     },
     listenScroll: {
       type: Boolean,

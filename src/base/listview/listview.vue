@@ -67,6 +67,7 @@ export default {
     Loading
   },
   props: {
+    /* eslint-disable */
     data: {
       type: Array,
       default: []
