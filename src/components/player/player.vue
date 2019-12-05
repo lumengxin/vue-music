@@ -19,7 +19,7 @@
         <div class="middle">
           <div class="middle-l">
             <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd">
+              <div class="cd" :class="cdCls">
                 <img :src="currentSong.image" alt="img" class="image" />
               </div>
             </div>
@@ -34,7 +34,8 @@
               <i class="icon-prev"></i>
             </div>
             <div class="icon i-center">
-              <i class="icon-play" @click="togglePlaying"></i>
+              <!-- <i class="icon-play" @click="togglePlaying"></i> -->
+              <i :class="playIcon" @click="togglePlaying"></i>
             </div>
             <div class="icon i-right">
               <i class="icon-next"></i>
@@ -50,14 +51,15 @@
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="open">
         <div class="icon">
-          <img :src="currentSong.image" alt="img" width="40" height="40" />
+          <img :src="currentSong.image" alt="img" width="40" height="40" :class="cdCls" />
         </div>
         <div class="text">
           <h2 class="name" v-html="currentSong.name"></h2>
           <p class="desc">{{ currentSong.singer }}</p>
         </div>
         <div class="control">
-
+          <!-- 阻止冒泡，展开全屏 -->
+          <i :class="miniIcon" @click.stop="togglePlaying"></i>
         </div>
         <div class="control">
           <i class="icon-playlist"></i>
@@ -79,6 +81,15 @@ const transform = prefixStyle('transform')
 export default {
   name: 'Player',
   computed: {
+    playIcon () {
+      return this.playing ? 'icon-pause' : 'icon-play'
+    },
+    miniIcon () {
+      return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
+    },
+    cdCls () {
+      return this.playing ? 'play' : 'play pause'
+    },
     ...mapGetters([
       'fullScreen',
       'playlist',
