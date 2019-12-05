@@ -5,7 +5,7 @@
       @after-enter="afterEnter"
       @leave="leave"
       @after-leave="afterLeave">
-      <div class="normal-player" v-show="fullScreen">
+      <div class="normal-player" v-show="fullScreen" ref="normalPlayer">
         <div class="background">
           <img :src="currentSong.image" alt="img" width="100%" height="100%" />
         </div>
@@ -34,7 +34,7 @@
               <i class="icon-prev"></i>
             </div>
             <div class="icon i-center">
-              <i class="icon-play"></i>
+              <i class="icon-play" @click="togglePlaying"></i>
             </div>
             <div class="icon i-right">
               <i class="icon-next"></i>
@@ -64,6 +64,8 @@
         </div>
       </div>
     </transition>
+
+    <audio :src="currentSong.url" ref="audio"></audio>
   </div>
 </template>
 
@@ -80,16 +82,36 @@ export default {
     ...mapGetters([
       'fullScreen',
       'playlist',
-      'currentSong'
+      'currentSong',
+      'playing'
     ])
+  },
+  watch: {
+    currentSong () {
+      // DOMException: The play() request was ...
+      // play时，dom还没准备，添加延时
+      // this.$refs.audio.play()
+      this.$nextTick(() => {
+        this.$refs.audio.play()
+      })
+    },
+    playing (newPlaying) {
+      const audio = this.$refs.audio
+      this.$nextTick(() => {
+        newPlaying ? audio.play() : audio.pause()
+      })
+      // newPlaying ? audio.play() : audio.pause()
+    }
   },
   methods: {
     back () {
       // this.fullScreen = false
       this.setFullScreen(false)
+      this.$refs.normalPlayer.style.display = 'none'
     },
     open () {
       this.setFullScreen(true)
+      this.$refs.normalPlayer.style.display = 'block'
     },
     enter (el, done) {
       const {x, y, scale} = this._getPosAndScale()
@@ -128,6 +150,9 @@ export default {
       this.$refs.cdWrapper.style.transition = ''
       this.$refs.cdWrapper.style[transform] = ''
     },
+    togglePlaying () {
+      this.setPlayingState(!this.playing)
+    },
     _getPosAndScale () {
       const targetWidth = 40
       const paddingLeft = 40
@@ -144,7 +169,8 @@ export default {
       }
     },
     ...mapMutations({
-      setFullScreen: 'SET_FULL_SCREEN'
+      setFullScreen: 'SET_FULL_SCREEN',
+      setPlayingState: 'SET_PLAYING_STATE'
     })
   }
 }
