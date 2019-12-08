@@ -155,6 +155,9 @@ export default {
       // this.$refs.audio.play()
       this.$nextTick(() => {
         this.$refs.audio.play()
+
+        // 测试歌词获取
+        this.currentSong.getLyric()
       })
     },
     playing (newPlaying) {

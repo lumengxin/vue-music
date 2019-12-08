@@ -1,5 +1,5 @@
 import { commonParams, options } from './config'
-// import axios from 'axios'
+import axios from 'axios'
 import jsonp from 'assets/js/jsonp'
 import { getUid } from 'assets/js/uid'
 
@@ -23,4 +23,25 @@ export function getVKey (songmid, filename) {
   return jsonp(url, data, Object.assign({}, options, {
     param: 'callback'
   }))
+}
+
+// 获取歌词
+export function getLyric (mid) {
+  const url = '/api/lyric'
+
+  const data = Object.assign({}, commonParams, {
+    songmid: mid,
+    pcachetime: +new Date(),
+    platfrom: 'yqq',
+    hostUin: 0,
+    needNewCode: 0,
+    g_tk: 67232076,
+    format: 'json'
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
 }

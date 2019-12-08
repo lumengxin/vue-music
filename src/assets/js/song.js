@@ -1,6 +1,7 @@
-import { getVKey } from 'api/song'
+import { getVKey, getLyric } from 'api/song'
 import { getUid } from './uid'
 import { ERR_OK } from 'api/config'
+// import { Base64 } from 'js-base64'
 
 let urlMap = {}
 
@@ -22,6 +23,15 @@ export default class Song {
     } else {
       this._genUrl()
     }
+  }
+
+  getLyric () {
+    getLyric(this.mid).then((res) => {
+      if (res.retcode === ERR_OK) {
+        this.lyric = res.lyric
+        console.log(this.lyric)
+      }
+    })
   }
 
   _genUrl () {
