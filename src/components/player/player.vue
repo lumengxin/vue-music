@@ -35,7 +35,8 @@
           </div>
           <div class="operators">
             <div class="icon i-left">
-              <i class="icon-sequence"></i>
+              <!-- <i class="icon-sequence"></i> -->
+              <i :class="iconMode" @click="changeMode"></i>
             </div>
             <div class="icon i-left" :class="disableCls">
               <i class="icon-prev" @click="prev"></i>
@@ -81,6 +82,7 @@
       @canplay="ready"
       @error="error"
       @timeupdate="updateTime"
+      @ended="end"
       >
     </audio>
   </div>
@@ -92,6 +94,8 @@ import animations from 'create-keyframe-animation'
 import { prefixStyle } from 'assets/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
+import { playMode } from 'assets/js/config'
+import { shuffle } from 'assets/js/util'
 
 const transform = prefixStyle('transform')
 
@@ -122,6 +126,10 @@ export default {
     disableCls () {
       return this.songReady ? '' : 'disable'
     },
+    iconMode () {
+      return this.mode === playMode.sequence ? 'icon-sequence'
+        : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
+    },
     percent () {
       return this.currentTime / this.currentSong.duration
     },
@@ -130,11 +138,18 @@ export default {
       'playlist',
       'currentSong',
       'playing',
-      'currentIndex'
+      'currentIndex',
+      'mode',
+      'sequenceList'
     ])
   },
   watch: {
-    currentSong () {
+    currentSong (newSong, oldSong) {
+      // 切换播放模式时，不触发播放状态值变化
+      if (newSong.id === oldSong.id) {
+        return
+      }
+
       // DOMException: The play() request was ...
       // play时，dom还没准备，添加延时
       // this.$refs.audio.play()
@@ -238,6 +253,10 @@ export default {
 
       this.songReady = false
     },
+    loop () {
+      this.$refs.audio.currentTime = 0
+      this.$refs.audio.play()
+    },
     // 解决切歌过快时报错
     ready () {
       this.songReady = true
@@ -248,6 +267,13 @@ export default {
     },
     updateTime (e) {
       this.currentTime = e.target.currentTime
+    },
+    end () {
+      if (this.mode === playMode.loop) {
+        this.loop()
+      } else {
+        this.next()
+      }
     },
     format (interval) {
       // 或0 正数向下取整
@@ -261,6 +287,27 @@ export default {
       if (!this.playing) {
         this.togglePlaying()
       }
+    },
+    changeMode () {
+      const mode = (this.mode + 1) % 3
+      this.setPlayMode(mode)
+
+      let list = null
+      if (mode === playMode.random) {
+        list = shuffle(this.sequenceList)
+      } else {
+        list = this.sequenceList
+      }
+
+      this.resetCurrentIndex(list)
+
+      this.setPlaylist(list)
+    },
+    resetCurrentIndex (list) {
+      let index = list.findIndex((item) => {
+        return item.id === this.currentSong.id
+      })
+      this.setCurrentIndex(index)
     },
     // 补位函数
     _pad (num, n = 2) {
@@ -289,7 +336,9 @@ export default {
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
-      setCurrentIndex: 'SET_CURRENT_INDEX'
+      setCurrentIndex: 'SET_CURRENT_INDEX',
+      setPlayMode: 'SET_PLAY_MODE',
+      setPlaylist: 'SET_PLAYLIST'
     })
   }
 }
