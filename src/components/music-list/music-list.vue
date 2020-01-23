@@ -39,12 +39,14 @@ import SongList from 'base/song-list/song-list'
 import { prefixStyle } from 'assets/js/dom'
 import Loading from 'base/loading/loading'
 import { mapActions } from 'vuex'
+import { playlistMixin } from 'assets/js/mixin'
 
 const RESERVED_HEIGHT = 40
 const transform = prefixStyle('transform')
 // const backdrop = prefixStyle('backdrop-filter')
 
 export default {
+  mixins: [playlistMixin],
   name: 'MusicList',
   components: {
     Scroll,
@@ -114,6 +116,12 @@ export default {
     }
   },
   methods: {
+    // 使用mixin,设置sroll底部高度
+    handlePlayList (playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.list.$el.style.bottom = bottom
+      this.$refs.list.refresh()
+    },
     scroll (pos) {
       this.scrollY = pos.y
     },
