@@ -4,6 +4,31 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>vue-music</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui" >
+    <meta name="apple-mobile-web-app-title" content="志文工作室" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta content="telephone=no" name="format-detection" />
+    <!– UC强制全屏 –>
+    <meta name="full-screen" content="yes">
+    <!– QQ强制全屏 –>
+    <meta name="x5-fullscreen" content="true">
+    <!– UC应用模式 –>
+    <meta name="browsermode" content="application">
+    <!– QQ应用模式 –>
+    <meta name="x5-page-mode" content="app">
+    <script>
+      window.onload = function() {
+        var de = document.documentElement;
+        if (de.requestFullscreen) {
+            de.requestFullscreen();
+        } else if (de.mozRequestFullScreen) {
+            de.mozRequestFullScreen();
+        } else if (de.webkitRequestFullScreen) {
+            de.webkitRequestFullScreen();
+        }
+      }
+    </script>
+
   </head>
   <body>
     <div id="app"></div>
