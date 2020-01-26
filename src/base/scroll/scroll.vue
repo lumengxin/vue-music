@@ -27,6 +27,15 @@ export default {
     listenScroll: {
       type: Boolean,
       default: false
+    },
+    pullUp: {
+      type: Boolean,
+      default: false
+    },
+    // 移动端搜索后，下滑时收起键盘
+    beforeScroll: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -51,6 +60,20 @@ export default {
         let me = this
         this.scroll.on('scroll', (pos) => {
           me.$emit('scroll', pos)
+        })
+      }
+
+      // 派发搜索页面上拉加载事件
+      if (this.pullUp) {
+        this.scroll.on('scrollEnd', () => {
+          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+            this.$emit('scrollToEnd')
+          }
+        })
+      }
+      if (this.beforeScroll) {
+         this.scroll.on('beforeScrollStart', () => {
+          this.$emit('beforeScroll')
         })
       }
     },

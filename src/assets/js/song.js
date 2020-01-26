@@ -73,7 +73,7 @@ export function createSong (musicData) {
   })
 }
 
-function filterSinger (singer) {
+export function filterSinger (singer) {
   let ret = []
   // 边界处理，singer为空
   if (!singer) {

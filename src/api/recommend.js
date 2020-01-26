@@ -61,7 +61,7 @@ export function getDiscList () {
 //   return jsonp(url, data, options)
 // }
 export function getRecommendSongList (disstid) {
-  const url = '/api/getCdInfo'
+  const url = '/api/getRecSongInfo'
 
   const data = Object.assign({}, commonParams, {
     disstid,
