@@ -130,6 +130,9 @@ export default {
     listScroll () {
       this.$emit('listScroll')
     },
+    refresh () {
+      this.$refs.suggest.refresh()
+    },
     _genResult (data) {
       let ret = []
       if (data.zhida && data.zhida.singerid) {
