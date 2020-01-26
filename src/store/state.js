@@ -1,4 +1,5 @@
 import { playMode } from 'assets/js/config'
+import { loadSearch } from 'assets/js/cache'
 
 const state = {
   singer: {},
@@ -19,7 +20,10 @@ const state = {
   // 推荐页歌单详情列表数据
   disc: {},
   // 排行页歌单详情列表数据
-  toplist: {}
+  toplist: {},
+  // 搜索历史
+  // searchHistory: []
+  searchHistory: loadSearch()
 }
 
 export default state
