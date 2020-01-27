@@ -97,11 +97,13 @@
             <i class="icon-mini" :class="miniIcon" @click.stop="togglePlaying"></i>
           </progress-circle>
         </div>
-        <div class="control">
+        <div class="control" @click.stop="showPlayList">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+
+    <play-list ref="playList"></play-list>
 
     <audio :src="currentSong.url"
       ref="audio"
@@ -121,19 +123,23 @@ import { prefixStyle } from 'assets/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import { playMode } from 'assets/js/config'
-import { shuffle } from 'assets/js/util'
+// import { shuffle } from 'assets/js/util'
 import Lyric from 'lyric-parser'
 import Scroll from 'base/scroll/scroll'
+import PlayList from 'components/play-list/play-list'
+import { playerMixin } from 'assets/js/mixin'
 
 const transform = prefixStyle('transform')
 const transitionDuration = prefixStyle('transitionDuration')
 
 export default {
+  mixins: [playerMixin],
   name: 'Player',
   components: {
     ProgressBar,
     ProgressCircle,
-    Scroll
+    Scroll,
+    PlayList
   },
   data () {
     return {
@@ -160,25 +166,30 @@ export default {
     disableCls () {
       return this.songReady ? '' : 'disable'
     },
-    iconMode () {
-      return this.mode === playMode.sequence ? 'icon-sequence'
-        : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
-    },
+    // iconMode () {
+    //   return this.mode === playMode.sequence ? 'icon-sequence'
+    //     : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
+    // },
     percent () {
       return this.currentTime / this.currentSong.duration
     },
     ...mapGetters([
       'fullScreen',
-      'playlist',
-      'currentSong',
-      'playing',
       'currentIndex',
-      'mode',
-      'sequenceList'
+      'playing'
+      // 'currentSong',
+      // 'playlist',
+      // 'mode',
+      // 'sequenceList'
     ])
   },
   watch: {
     currentSong (newSong, oldSong) {
+      // 解决播放列表中，删除最后一首歌时bug
+      if (!newSong.id) {
+        return
+      }
+
       // 切换播放模式时，不触发播放状态值变化
       if (newSong.id === oldSong.id) {
         return
@@ -357,27 +368,27 @@ export default {
         this.currentLyric.seek(currentTime * 1000)
       }
     },
-    changeMode () {
-      const mode = (this.mode + 1) % 3
-      this.setPlayMode(mode)
+    // changeMode () {
+    //   const mode = (this.mode + 1) % 3
+    //   this.setPlayMode(mode)
 
-      let list = null
-      if (mode === playMode.random) {
-        list = shuffle(this.sequenceList)
-      } else {
-        list = this.sequenceList
-      }
+    //   let list = null
+    //   if (mode === playMode.random) {
+    //     list = shuffle(this.sequenceList)
+    //   } else {
+    //     list = this.sequenceList
+    //   }
 
-      this.resetCurrentIndex(list)
+    //   this.resetCurrentIndex(list)
 
-      this.setPlaylist(list)
-    },
-    resetCurrentIndex (list) {
-      let index = list.findIndex((item) => {
-        return item.id === this.currentSong.id
-      })
-      this.setCurrentIndex(index)
-    },
+    //   this.setPlaylist(list)
+    // },
+    // resetCurrentIndex (list) {
+    //   let index = list.findIndex((item) => {
+    //     return item.id === this.currentSong.id
+    //   })
+    //   this.setCurrentIndex(index)
+    // },
     getLyric () {
       this.currentSong.getLyric().then((lyric) => {
         // 解析歌词字符串
@@ -469,6 +480,9 @@ export default {
       }
       return num
     },
+    showPlayList () {
+      this.$refs.playList.show()
+    },
     _getPosAndScale () {
       const targetWidth = 40
       const paddingLeft = 40
@@ -485,11 +499,12 @@ export default {
       }
     },
     ...mapMutations({
-      setFullScreen: 'SET_FULL_SCREEN',
-      setPlayingState: 'SET_PLAYING_STATE',
-      setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayMode: 'SET_PLAY_MODE',
-      setPlaylist: 'SET_PLAYLIST'
+      // playerMixin中有的，不能重复出现
+      setFullScreen: 'SET_FULL_SCREEN'
+      // setPlayingState: 'SET_PLAYING_STATE',
+      // setCurrentIndex: 'SET_CURRENT_INDEX',
+      // setPlayMode: 'SET_PLAY_MODE',
+      // setPlaylist: 'SET_PLAYLIST'
     })
   },
   created () {
