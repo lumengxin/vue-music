@@ -107,7 +107,7 @@
 
     <audio :src="currentSong.url"
       ref="audio"
-      @canplay="ready"
+      @play="ready"
       @error="error"
       @timeupdate="updateTime"
       @ended="end"
@@ -197,6 +197,9 @@ export default {
       // 解决切换时歌词乱跳动
       if (this.currentLyric) {
         this.currentLyric.stop()
+        this.currentTime = 0
+        this.playingLyric = ''
+        this.currentLineNum = 0
       }
       // DOMException: The play() request was ...
       // play时，dom还没准备，添加延时
@@ -204,7 +207,8 @@ export default {
 
       /* 后台运行时，js不执行。解决后台切换到前台，歌曲切换问题 */
       // this.$nextTick(() => {
-      setTimeout(() => {
+      clearInterval(this.timer)
+      this.timer = setTimeout(() => {
         this.$refs.audio.play()
 
         // 测试歌词获取
@@ -286,6 +290,8 @@ export default {
 
       if (this.playlist.length === 1) {
         this.loop()
+
+        return
       } else {
         let index = this.currentIndex - 1
         if (index === -1) {
@@ -307,6 +313,8 @@ export default {
       // 处理边界，歌单列表只有一首
       if (this.playlist.length === 1) {
         this.loop()
+        // 解决播放列表中只有一首歌时，点击下一曲后按钮变为禁用状态问题
+        return
       } else {
         let index = this.currentIndex + 1
         if (index === this.playlist.length) {
@@ -393,6 +401,11 @@ export default {
     // },
     getLyric () {
       this.currentSong.getLyric().then((lyric) => {
+        // 解决快速切歌时，歌词显示异常
+        if (this.currentSong.lyric !== lyric) {
+          return
+        }
+
         // 解析歌词字符串
         this.currentLyric = new Lyric(lyric, this.handleLyric)
         if (this.playing) {
