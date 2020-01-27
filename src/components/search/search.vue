@@ -4,7 +4,7 @@
       <search-box ref="searchBox" @query="onQueryChange"></search-box>
     </div>
     <div class="shortcut-wrapper" v-show="!query" ref="shortcutWrapper">
-      <scroll class="shortcut" :data="shortcut" ref="shortcut">
+      <scroll class="shortcut" :data="shortcut" ref="shortcut" :refreshDelay="refreshDelay">
         <!-- scroll只能控制一个div -->
         <div>
           <div class="hot-key">
@@ -46,14 +46,14 @@ import SearchBox from 'base/search-box/search-box'
 import { getHotKey } from 'api/search'
 import { ERR_OK } from 'api/config'
 import Suggest from 'components/suggest/suggest'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import SearchList from 'base/search-list/search-list'
 import Confirm from 'base/confirm/confirm'
 import Scroll from 'base/scroll/scroll'
-import { playlistMixin } from 'assets/js/mixin'
+import { playlistMixin, searchMixin } from 'assets/js/mixin'
 
 export default {
-  mixins: [playlistMixin],
+  mixins: [playlistMixin, searchMixin],
   name: 'Search',
   components: {
     SearchBox,
@@ -64,17 +64,17 @@ export default {
   },
   data () {
     return {
-      hotKey: [],
-      query: ''
+      hotKey: []
+      // query: ''
     }
   },
   computed: {
     shortcut () {
       return this.hotKey.concat(this.searchHistory)
-    },
-    ...mapGetters([
-      'searchHistory'
-    ])
+    }
+    // ...mapGetters([
+    //   'searchHistory'
+    // ])
   },
   watch: {
     // 解决刚好添加到可滚动长度时，无法滚动
@@ -103,18 +103,19 @@ export default {
         }
       })
     },
-    addQuery (hotQuery) {
-      this.$refs.searchBox.setQuery(hotQuery)
-    },
-    onQueryChange (query) {
-      this.query = query
-    },
-    blurInput () {
-      this.$refs.searchBox.blur()
-    },
-    savaSearch () {
-      this.saveSearchHistory(this.query)
-    },
+    // addQuery (hotQuery) {
+    //   this.$refs.searchBox.setQuery(hotQuery)
+    // },
+    // onQueryChange (query) {
+    //   this.query = query
+    // },
+    // blurInput () {
+    //   this.$refs.searchBox.blur()
+    // },
+    // savaSearch () {
+    //   this.saveSearchHistory(this.query)
+    // },
+
     // deleteOne (item) {
     //   this.deleteSearchHistory(item)
     // },
@@ -125,8 +126,8 @@ export default {
       this.$refs.confirm.show()
     },
     ...mapActions([
-      'saveSearchHistory',
-      'deleteSearchHistory',
+      // 'saveSearchHistory',
+      // 'deleteSearchHistory',
       'clearSearchHistory'
     ])
   },

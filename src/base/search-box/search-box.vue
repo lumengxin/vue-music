@@ -43,7 +43,7 @@ export default {
     // 搜索节流
     this.$watch('query', debounce((newQuery) => {
       this.$emit('query', newQuery)
-    }, 400))
+    }, 200))
   }
 }
 </script>

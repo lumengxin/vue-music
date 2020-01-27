@@ -11,7 +11,7 @@
             </span>
           </h1>
         </div>
-        <scroll class="list-content" ref="listContent">
+        <scroll class="list-content" ref="listContent" :refreshDelay="refreshDelay">
           <transition-group name="list" tag="ul">
             <li class="item" v-for="(item, index) in sequenceList" :key="index"
               @click="selectItem(item, index)"
@@ -29,7 +29,7 @@
           </transition-group>
         </scroll>
         <div class="list-operate">
-          <div class="add">
+          <div class="add" @click="addSong">
             <i class="icon-add"></i>
             <span class="text">添加歌曲至列表</span>
           </div>
@@ -40,6 +40,8 @@
       </div>
 
       <confirm ref="confirm" text="是否清空播放列表?" @confirm="confirmClear"></confirm>
+
+      <add-song ref="addSong"></add-song>
     </div>
   </transition>
 </template>
@@ -50,16 +52,19 @@ import Scroll from 'base/scroll/scroll'
 import { playMode } from 'assets/js/config'
 import Confirm from 'base/confirm/confirm'
 import { playerMixin } from 'assets/js/mixin'
+import AddSong from 'components/add-song/add-song'
 
 export default {
   mixins: [playerMixin],
   components: {
     Scroll,
-    Confirm
+    Confirm,
+    AddSong
   },
   data () {
     return {
-      showFlag: false
+      showFlag: false,
+      refreshDelay: 100
     }
   },
   computed: {
@@ -128,6 +133,9 @@ export default {
     confirmClear () {
       this.deleteSongList()
       this.hide()
+    },
+    addSong () {
+      this.$refs.addSong.show()
     },
     // ...mapMutations({
     //   setCurrentIndex: 'SET_CURRENT_INDEX',

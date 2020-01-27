@@ -1,4 +1,4 @@
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { playMode } from 'assets/js/config'
 import { shuffle } from 'assets/js/util'
 
@@ -26,6 +26,7 @@ export const playlistMixin = {
   }
 }
 
+// 公用player.vue, play-list.vue中部分代码
 export const playerMixin = {
   computed: {
     iconMode () {
@@ -67,5 +68,38 @@ export const playerMixin = {
       setPlayMode: 'SET_PLAY_MODE',
       setPlaylist: 'SET_PLAYLIST'
     })
+  }
+}
+
+// 公用search.vue, add-song.vue中部分代码
+export const searchMixin = {
+  data () {
+    return {
+      query: '',
+      refreshDelay: 100
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'searchHistory'
+    ])
+  },
+  methods: {
+    addQuery (hotQuery) {
+      this.$refs.searchBox.setQuery(hotQuery)
+    },
+    onQueryChange (query) {
+      this.query = query
+    },
+    blurInput () {
+      this.$refs.searchBox.blur()
+    },
+    savaSearch () {
+      this.saveSearchHistory(this.query)
+    },
+    ...mapActions([
+      'saveSearchHistory',
+      'deleteSearchHistory'
+    ])
   }
 }

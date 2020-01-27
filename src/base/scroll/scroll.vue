@@ -36,6 +36,10 @@ export default {
     beforeScroll: {
       type: Boolean,
       default: false
+    },
+    refreshDelay: {
+      type: Number,
+      default: 20
     }
   },
   watch: {
@@ -97,7 +101,9 @@ export default {
     // 确保dom已经被渲染了
     setTimeout(() => {
       this._initScroll()
-    }, 20)
+    // scroll中含有动画组件时，动画过渡大概100ms，固定20ms刷新时间不够
+    // }, 20)
+    }, this.refreshDelay)
   }
 }
 </script>
