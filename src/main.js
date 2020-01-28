@@ -10,6 +10,12 @@ import fastclick from 'fastclick'
 import 'assets/stylus/index.styl'
 // vue第三方插件，懒加载
 import VueLazyLoad from 'vue-lazyload'
+// 移动端调试
+import VConsole from 'vconsole'
+
+// eslint-disable-next-line no-unused-vars
+var vConsole = new VConsole()
+console.log('vconsole')
 
 fastclick.attach(document.body)
 
