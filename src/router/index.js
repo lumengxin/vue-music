@@ -69,6 +69,10 @@ export default new Router({
     {
       path: '/user',
       component: () => import('components/user-center/user-center')
+    },
+    {
+      path: '/vr',
+      component: () => import('components/vr-model/vr-model')
     }
   ]
 })

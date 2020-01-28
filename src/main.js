@@ -13,6 +13,7 @@ import VueLazyLoad from 'vue-lazyload'
 // 移动端调试
 // eslint-disable-next-line no-unused-vars
 import VConsole from 'vconsole'
+import 'assets/ali#icon/iconfont.css'
 
 // eslint-disable-next-line no-unused-vars
 // var vConsole = new VConsole()

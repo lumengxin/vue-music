@@ -107,7 +107,7 @@ export default {
     })
   },
   created () {
-    this._getRecommend()
+    // this._getRecommend()
     this._getDiscList()
   }
 }

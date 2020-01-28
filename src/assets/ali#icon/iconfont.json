@@ -1,0 +1,30 @@
+{
+  "id": "1526277",
+  "name": "vue-music",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "vue-music vue全家桶移动app项目中部分图标来源",
+  "glyphs": [
+    {
+      "icon_id": "4619682",
+      "name": "VR",
+      "font_class": "VR",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "6898466",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e676",
+      "unicode_decimal": 58998
+    },
+    {
+      "icon_id": "8669581",
+      "name": "主题",
+      "font_class": "b_ic_zhuti",
+      "unicode": "e9a1",
+      "unicode_decimal": 59809
+    }
+  ]
+}
