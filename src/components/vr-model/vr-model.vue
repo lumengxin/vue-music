@@ -18,11 +18,6 @@ export default {
   components: {
     VrPlay
   },
-  data () {
-    return {
-      // src: 'http://dl.stream.qqmusic.qq.com/C400002XnIJm4DbR6g.m4a?vkey=4CB37D2827FD85579F5E98364F7A4C7D3F8F485EEFCAAAD949C3EF6BB2755252EAC19F861F56E16C0E325205C49B47F75918F494A73CC87F&guid=4987297440&uin=0&fromtag=66'
-    }
-  },
   methods: {
     back () {
       this.$router.back()

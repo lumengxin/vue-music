@@ -53,7 +53,7 @@
             <span class="dot" :class="{'active': currentShow === 'lyric'}"></span>
           </div>
           <div class="progress-wrapper">
-            <span class="item time-l">{{format(currentTime)}}</span>
+            <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
               <progress-bar :percent="percent" @percentChange="onProgressBarChanger"></progress-bar>
             </div>
@@ -74,8 +74,11 @@
             <div class="icon i-right" :class="disableCls">
               <i class="icon-next" @click="next"></i>
             </div>
-            <div class="icon i-right">
+            <!-- <div class="icon i-right">
               <i class="icon" :class="getFavoriteIcon(currentSong)" @click="toggleFavorite(currentSong)"></i>
+            </div> -->
+            <div class="icon i-right">
+              <i class="icon-playlist" @click="showPlayList"></i>
             </div>
           </div>
         </div>
