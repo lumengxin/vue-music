@@ -13,7 +13,14 @@ import VueLazyLoad from 'vue-lazyload'
 // 移动端调试
 // eslint-disable-next-line no-unused-vars
 import VConsole from 'vconsole'
+// 引入swiper
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
 import 'assets/ali#icon/iconfont.css'
+import 'swiper/dist/css/swiper.css'
+
+// 全局使用swiper
+Vue.use(VueAwesomeSwiper)
 
 // eslint-disable-next-line no-unused-vars
 // var vConsole = new VConsole()

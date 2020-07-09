@@ -1,13 +1,13 @@
 <template>
   <div class="m-header">
-    <div class="icon"></div>
-    <div class="text">Style</div>
+    <div class="icon" @click="goHome"></div>
+    <div class="text" @click="goHome">Style</div>
     <div class="expand">
       <div class="btn search" @click="goSearch">
         <i class="iconfont iconsousuo"></i>
       </div>
       <div class="btn skin">
-        <i class="iconfont iconb_ic_zhuti"></i>
+        <i class="iconfont iconb_ic_zhuti" @click="changeSkin"></i>
       </div>
       <div class="btn vr">
         <i class="iconfont iconVR" @click="goVr"></i>
@@ -28,6 +28,9 @@ export default {
     },
     goVr () {
       this.$router.push('/vr')
+    },
+    goHome () {
+      this.$router.push('/')
     }
   }
 }
@@ -82,5 +85,6 @@ export default {
         display: block
         padding: 12px
         font-size: 20px
-        color: $color-theme
+        // color: $color-theme
+        color: #fff
 </style>
