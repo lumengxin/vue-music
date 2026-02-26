@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Vue Music RN",
+    "slug": "vue-music-rn",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.vue-music-rn"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1217"
+      }
+    }
+  }
+}
