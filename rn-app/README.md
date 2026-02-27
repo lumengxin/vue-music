@@ -50,9 +50,13 @@ npm run ios
 编辑 `src/config/env.ts`：
 
 - `apiMode: 'proxy'`
-- `apiBaseUrl: 'http://<你的电脑局域网IP>:3000/api'`
+- `apiBaseUrl` 默认会自动跟随 Metro 调试主机（真机不必每次手改 IP）
 
-真机调试时不要使用 `localhost`，请使用电脑局域网 IP。
+如需手动指定，可在启动前设置环境变量：
+
+```bash
+EXPO_PUBLIC_API_BASE_URL=http://<你的电脑局域网IP>:3000/api npm run start
+```
 
 ## 代理健康检查
 
